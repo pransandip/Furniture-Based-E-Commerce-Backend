@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const Otp = require('../models/Otp')
 const User = require('../models/User')
 const { checkOtp } = require('../utils/utility.function')
-const { sendOtpEmail } = require('../utils/mail.function')
+const { sendEmail } = require('../utils/mail.function')
 
 
 const sendOTPVerificationEmail = async (req, res) => {
@@ -20,7 +20,7 @@ const sendOTPVerificationEmail = async (req, res) => {
             createdAt: Date.now(),
             expiresAt: Date.now() + 3600000,
         })
-        await sendOtpEmail(randomOTP, email)
+        await sendEmail(randomOTP, email)
         res.status(200).send({
             akg: 0,
             status: "PENDING",
@@ -67,7 +67,9 @@ const verifyOtp = async (req, res) => {
                     res.status(200).send({ message: 'Code has expired. Please requiest again.' })
 
                 } else {
+                    console.log('otp->', otp)
                     const validOTP = await checkOtp(otp, hashedOTP);
+                    console.log(validOTP)
                     if (!validOTP) {
                         // suplied otp is wrong
                         res.status(400).send({ message: 'Invalid code passed. Check your inbox.' })

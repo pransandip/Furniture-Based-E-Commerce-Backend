@@ -2,18 +2,6 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { JWT } = require('../config/jwt.config')
 
-const checkResetString = (resetString, hashedResetString) => {
-    return new Promise((resolve, reject) => {
-        bcrypt.compare(resetString, hashedResetString, (err, validResetString) => {
-            if (err) {
-                reject(err)
-            }
-
-            resolve(validResetString)
-        })
-    })
-}
-
 const checkOtp = (otp, hashedOTP) => {
     return new Promise((resolve, reject) => {
         bcrypt.compare(otp, hashedOTP, (err, validOTP) => {
@@ -52,4 +40,4 @@ const verifyToken = token =>
         })
     })
 
-module.exports = { checkResetString, checkOtp, checkPassword, newToken, verifyToken }
+module.exports = { checkOtp, checkPassword, newToken, verifyToken }
